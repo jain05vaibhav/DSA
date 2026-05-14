@@ -44,7 +44,7 @@ Node *insertbeforethekthel(Node *head,int val,int k){
     }
     Node *temp=head;
     int cnt=0;
-    while(temp!=0){
+    while(temp!=NULL){
         cnt++;
         if(cnt==k) break;
         temp=temp->next;
@@ -54,11 +54,17 @@ Node *insertbeforethekthel(Node *head,int val,int k){
     temp->prev=newNode;
     return head;
 }
-Node *insertbeforenode(Node *temp,int val){
+Node *insertbeforenode(Node *head,Node *temp,int val){
+    if(temp==head){
+    Node *newHead=new Node(val,head,nullptr);
+    head->prev=newNode;
+    return newNode; 
+    }
     Node *prev=temp->prev;
     Node *newNode=new Node(val,temp,prev);
     prev->next=newNode;
     temp->prev=newNode;
+    return newNode;
 }
 Node *deletehead(Node* head){
     if(head==NULL || head->next==NULL){
