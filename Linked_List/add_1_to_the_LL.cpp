@@ -92,7 +92,6 @@ Node *add_1_toLL_Optimal(Node *head){
     return head;
 }
 
-
 int main(){
     int n;
     cin >> n;
