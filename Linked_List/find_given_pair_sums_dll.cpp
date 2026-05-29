@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<stack>
+#include<map>
 using namespace std;
 //given DLL is sorted in order 
 class Node{
@@ -20,19 +21,38 @@ class Node{
     }
    
 };
-
-Node *delete_all_occurences_of_a_key(Node * head,int key){
-    Node *temp=head;
-    while(temp!=nullptr){
-        if(temp->data==key){
-            if(temp==head) head=head->next;
-            Node *prevNode=temp->prev;
-            Node *nextNode=temp->next;
-            if(prevNode) prevNode->next=nextNode;
-            if(nextNode) nextNode->prev=prevNode;
-        }else temp=temp->next;
+Node* bubblesort(Node *head){
+    if(head==NULL || head->next==NULL) return head;
+    Node* temp1=head,*temp2=head;
+    while(temp1!=nullptr){
+        while(temp2!=nullptr){
+            if(temp1->data>temp2->data){
+                int temp=temp1->data;
+                temp1->data=temp2->data;
+                temp2->data=temp;
+            }
+            temp2=temp2->next;
+        }
+        temp2=head;
+            temp1=temp1->next;
     }
-    return head;
+}
+vector<pair<Node*,Node*>> find_pairs_gven_with_dll(Node * head,int sum){
+    bubblesort(head);
+    Node *temp1=head,*temp2;
+    vector<pair<Node*,Node*>>mpp;
+    while(temp1!=NULL){
+        temp2=temp1->next;
+        while(temp2!=NULL && temp1->data+temp2->data<=sum){
+            if(temp1->data+temp2->data==sum){
+                mpp.push_back({temp1,temp2});
+            }
+            temp2=temp2->next;
+        }
+        temp1=temp1->next;
+    }
+    return mpp;
+    
 }
 Node *convertArray2DLL(vector <int>&arr){
     Node *head=new Node(arr[0]);
@@ -65,10 +85,13 @@ int main(){
     }
     Node *head=convertArray2DLL(arr);
     printall(head);
-    int k;
-    cout<<"Enter the Key To delete: ";
-    cin>>k;
-    head=delete_all_occurences_of_a_key(head,k);
-    printall(head);
+    int sum;
+    cout<<"Enter the sum: ";
+    cin>>sum;
+    vector<pair<Node*,Node*>>mpp=find_pairs_gven_with_dll(head,sum);
+    for(auto it:mpp){
+        cout<<it.first->data<<" "<<it.second->data<<endl;
+    }
+    //printall(head);
     return 0;
 }
