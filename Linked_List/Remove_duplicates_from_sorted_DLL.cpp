@@ -42,43 +42,20 @@ Node* bubblesort(Node* head){
 
     return head;
 }
-
-vector<pair<Node*,Node*>> find_pairs_gven_with_dll(Node * head,int sum){
-    Node *temp1=head,*temp2;
-    vector<pair<Node*,Node*>>mpp;
-    while(temp1!=NULL){
-        temp2=temp1->next;
-        while(temp2!=NULL && temp1->data+temp2->data<=sum){
-            if(temp1->data+temp2->data==sum){
-                mpp.push_back({temp1,temp2});
-            }
-            temp2=temp2->next;
+Node *remove_duplicates_from_sorted_DLL(Node *head){
+    Node *temp=head;
+    while(temp!=NULL && temp->next!=NULL){
+        Node *nextNode=temp;
+        while(nextNode!=NULL && nextNode->data==temp->data){
+            Node *duplicate=nextNode;
+            nextNode=nextNode->next;
+            delete duplicate;
         }
-        temp1=temp1->next;
+        temp->next=nextNode;
+       if(nextNode!=NULL) nextNode->prev=temp;
+        temp=temp->next;
     }
-    return mpp;
-}
-vector<pair<Node*,Node*>>find_pairs_gven_with_dll_optimal(Node *head,int sum){
-    Node *left=head;
-    Node *right=head;
-    while(right->next!=nullptr){//O(N)
-        right=right->next;
-    }
-    vector<pair<Node*,Node*>>ans;
-    //O(N)
-    while(left != right && right->next != left){
-        if(left->data+right->data==sum){
-            ans.push_back({left,right});
-            left=left->next;
-            right=right->prev;
-        }else if(left->data+right->data<sum){
-            left=left->next;
-        }else{
-            right=right->prev;
-        }
-    }
-    //Space Complexity: Depending on No. of pairs
-    return ans;
+    return head;
 }
 Node *convertArray2DLL(vector <int>&arr){
     Node *head=new Node(arr[0]);
@@ -111,17 +88,10 @@ int main(){
     }
     Node *head=convertArray2DLL(arr);
     printall(head);
-    int sum;
-    cout<<"Enter the sum: ";
-    cin>>sum;
     head=bubblesort(head);
     cout<<"After sorting: ";
     printall(head);
-    vector<pair<Node*,Node*>>mpp=find_pairs_gven_with_dll_optimal(head,sum);
-    for(auto it:mpp){
-        cout<<it.first->data<<" "<<it.second->data<<endl;
-    }
-    //printall(head);
-
+    head= remove_duplicates_from_sorted_DLL(head);
+    printall(head);
     return 0;
 }
